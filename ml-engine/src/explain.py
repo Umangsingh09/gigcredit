@@ -24,6 +24,7 @@ except Exception:
 	import pickle
 	_use_joblib = False
 
+from .distribution_check import check_out_of_distribution, load_distribution
 from .features import build_feature_matrix, REQUIRED_COLUMNS
 from .predict import _safe_build_input, MODEL_NAME
 
@@ -99,6 +100,13 @@ def explain_worker(
 	raw_df = _safe_build_input(input_data)
 	X = build_feature_matrix(raw_df)
 
+	# Flag inputs outside the training data's value range (see
+	# distribution_check.py and ml-engine/models/MODEL_CARD.md). Never
+	# alters the input — only surfaces the warning alongside the
+	# explanation.
+	distribution_bounds = load_distribution(str(models_dir))
+	ood_fields = check_out_of_distribution(raw_df.iloc[0].to_dict(), distribution_bounds)
+
 	# Ensure feature ordering matches training
 	if feature_names:
 		X = X.reindex(columns=feature_names)
@@ -163,6 +171,8 @@ def explain_worker(
 		"top_risk_factors": top_risk_fmt,
 		"top_positive_factors": top_positive_fmt,
 		"explanation": explanation_text,
+		"out_of_distribution": bool(ood_fields),
+		"out_of_distribution_fields": ood_fields,
 	}
 
 	return result

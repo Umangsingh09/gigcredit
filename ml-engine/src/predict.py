@@ -30,6 +30,7 @@ except Exception:
 	import pickle
 	_use_joblib = False
 
+from .distribution_check import check_out_of_distribution, load_distribution
 from .features import build_feature_matrix, REQUIRED_COLUMNS
 
 
@@ -107,6 +108,14 @@ def predict_worker(
 	raw_df = _safe_build_input(input_data)
 	X = build_feature_matrix(raw_df)
 
+	# Flag inputs outside the training data's value range. This never
+	# alters the input or the prediction — it only surfaces, explicitly,
+	# that the model has no real basis for judging a value it never saw
+	# anything close to during training (see distribution_check.py and
+	# ml-engine/models/MODEL_CARD.md).
+	distribution_bounds = load_distribution(str(models_dir))
+	ood_fields = check_out_of_distribution(raw_df.iloc[0].to_dict(), distribution_bounds)
+
 	# Align columns to what the model expects (pipeline was saved with a set)
 	# If model metadata exists, we could reorder; otherwise assume matching
 	try:
@@ -137,6 +146,8 @@ def predict_worker(
 		"predicted_class": int(pred),
 		"risk_score": round(float(risk_score), 4),
 		"risk_category": risk_category,
+		"out_of_distribution": bool(ood_fields),
+		"out_of_distribution_fields": ood_fields,
 	}
 
 	return result
