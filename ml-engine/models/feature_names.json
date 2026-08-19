@@ -1,0 +1,20 @@
+{
+  "feature_names": [
+    "worker_id",
+    "average_monthly_income",
+    "income_volatility",
+    "income_stability",
+    "income_cv",
+    "income_trend",
+    "recent_income_mean",
+    "months_zero_income",
+    "working_days_per_month",
+    "gig_duration_months",
+    "completion_rate",
+    "cancellation_rate",
+    "platform_rating",
+    "existing_monthly_obligations",
+    "obligation_to_income",
+    "income_per_workday"
+  ]
+}
