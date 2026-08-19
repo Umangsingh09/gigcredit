@@ -135,11 +135,18 @@ class FeatureEngineer:
 			df["working_days_per_month"].astype(float) + 1e-9
 		)
 
-		# Build feature DataFrame. Keep worker_id for mapping but it should not
-		# be used as an input to models unless explicitly desired.
+		# Build feature DataFrame. worker_id is intentionally NOT included:
+		# it is a synthetic sequential row identifier
+		# (data_generator.generate_dataset: worker_id = np.arange(1, n+1))
+		# with no causal relationship to loan_repaid. An earlier version of
+		# this pipeline fit the model on worker_id as well, which let a
+		# purely spurious, arbitrary identifier materially shift
+		# predictions and risk categories (see ml-engine/models/MODEL_CARD.md
+		# for the investigation). Callers that need worker_id for
+		# row/worker identification already have it on the input `df`
+		# passed to this method — it never needs to round-trip through X.
 		X = pd.DataFrame(
 			{
-				"worker_id": df["worker_id"].values,
 				"average_monthly_income": df["average_monthly_income"].astype(float),
 				"income_volatility": df["income_volatility"].astype(float),
 				"income_stability": income_stability,
