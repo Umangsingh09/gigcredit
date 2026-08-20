@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.app.api.auth import router as auth_router
+from backend.app.api.credit import router as credit_router
 from backend.app.api.worker import router as worker_router
 
 app = FastAPI(
@@ -29,4 +30,5 @@ def health_check():
 
 
 app.include_router(auth_router)
+app.include_router(credit_router)
 app.include_router(worker_router)
