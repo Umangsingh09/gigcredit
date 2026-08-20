@@ -192,8 +192,12 @@ class _AuthScreenState extends State<AuthScreen> {
 
     if (mounted) {
       final provider = Provider.of<WorkerProvider>(context, listen: false);
+      final finalName = authResult['name'] ?? name;
+      final finalEmail = authResult['email'] ?? email;
+
       provider.completeOnboarding(
-        name: authResult['name'] ?? name,
+        name: finalName,
+        email: finalEmail,
         phone: '+91 98765 43210',
         city: 'Bengaluru, KA',
         pan: 'ABCDE1234F',
@@ -202,7 +206,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Google Sign-In Verified: ${authResult['email']} ✅'),
+          content: Text('Google Sign-In Verified: $finalEmail ✅'),
           backgroundColor: AppTheme.secondaryAccent,
         ),
       );
@@ -229,6 +233,7 @@ class _AuthScreenState extends State<AuthScreen> {
       final provider = Provider.of<WorkerProvider>(context, listen: false);
       provider.completeOnboarding(
         name: email.split('@').first,
+        email: email,
         phone: '+91 98765 43210',
         city: 'Bengaluru, KA',
         pan: 'ABCDE1234F',

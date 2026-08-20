@@ -84,13 +84,14 @@ class WorkerApiService {
     return WorkerProfile(
       id: 'wrk_8849',
       name: 'Raja Kumar',
+      email: 'raja.kumar@gmail.com',
       phone: '+91 98765 43210',
       city: 'Bengaluru, KA',
       panNumber: 'ABCDE1234F',
       upiId: 'raja.kumar@okaxis',
       totalMonthsExperience: 18,
       avgDailyHours: 8.5,
-      isOnboarded: true,
+      isOnboarded: false,
       platforms: [
         GigPlatform(
           id: 'p_swiggy',
