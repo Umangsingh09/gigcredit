@@ -1,0 +1,58 @@
+{
+  "average_monthly_income": {
+    "min": 150.0,
+    "max": 9242.27
+  },
+  "income_volatility": {
+    "min": 0.022,
+    "max": 0.686
+  },
+  "working_days_per_month": {
+    "min": 5.0,
+    "max": 30.0
+  },
+  "gig_duration_months": {
+    "min": 3.0,
+    "max": 47.0
+  },
+  "completion_rate": {
+    "min": 0.0,
+    "max": 1.0
+  },
+  "cancellation_rate": {
+    "min": 0.0,
+    "max": 0.402
+  },
+  "platform_rating": {
+    "min": 2.23,
+    "max": 5.0
+  },
+  "existing_monthly_obligations": {
+    "min": 0.0,
+    "max": 2970.41
+  },
+  "income_month_1": {
+    "min": 0.0,
+    "max": 10886.88
+  },
+  "income_month_2": {
+    "min": 0.0,
+    "max": 12325.18
+  },
+  "income_month_3": {
+    "min": 0.0,
+    "max": 12671.91
+  },
+  "income_month_4": {
+    "min": 0.0,
+    "max": 10175.13
+  },
+  "income_month_5": {
+    "min": 0.0,
+    "max": 10328.08
+  },
+  "income_month_6": {
+    "min": 0.0,
+    "max": 10846.46
+  }
+}

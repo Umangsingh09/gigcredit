@@ -2,18 +2,20 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.app.api.auth import router as auth_router
+from backend.app.api.credit import router as credit_router
 from backend.app.api.management import router as management_router
-
+from backend.app.api.worker import router as worker_router
 
 app = FastAPI(
-    title="gigcredit API",
+    title="GigCredit API",
     description="Alternative credit underwriting API for gig workers",
     version="1.0.0",
 )
 
+# Enable CORS for the lender dashboard (Vite dev server) and Flutter Web / Android / Desktop clients
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -24,9 +26,11 @@ app.add_middleware(
 def health_check():
     return {
         "status": "healthy",
-        "service": "gigcredit API"
+        "service": "GigCredit API Core Engine"
     }
 
 
 app.include_router(auth_router)
 app.include_router(management_router)
+app.include_router(credit_router)
+app.include_router(worker_router)
