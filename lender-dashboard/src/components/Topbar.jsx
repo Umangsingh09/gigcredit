@@ -1,8 +1,14 @@
-function Topbar({ currentPage }) {
-  const pageTitle =
-    currentPage === "applications"
-      ? "Applications"
-      : "Overview";
+function Topbar({ currentPage, onLogout, profile }) {
+  const pageTitles = {
+    dashboard: "Overview",
+    applications: "Applications",
+    analytics: "Analytics",
+    settings: "Settings",
+    "worker-profile": "Worker Profile",
+  };
+  const pageTitle = pageTitles[currentPage] || "Overview";
+  const lenderName = profile?.full_name || "Umang Raj";
+  const initials = lenderName.split(" ").map((part) => part[0]).join("").slice(0, 2).toUpperCase();
 
   return (
     <header className="topbar">
@@ -17,15 +23,15 @@ function Topbar({ currentPage }) {
         </div>
 
         <div className="lender-profile">
-          <div className="profile-avatar">A</div>
+          <div className="profile-avatar">{initials}</div>
 
           <div className="profile-info">
-            <strong>Aditya Kumar</strong>
+            <strong>{lenderName}</strong>
             <span>Lender</span>
           </div>
         </div>
 
-        <button className="logout-button">
+        <button className="logout-button" onClick={onLogout}>
           Logout
         </button>
       </div>

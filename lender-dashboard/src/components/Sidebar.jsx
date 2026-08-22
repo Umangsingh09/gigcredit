@@ -35,12 +35,18 @@ function Sidebar({ currentPage, onNavigate }) {
 
         <p className="nav-label">MANAGEMENT</p>
 
-        <button className="nav-item">
+        <button
+          className={`nav-item ${currentPage === "analytics" ? "active" : ""}`}
+          onClick={() => onNavigate("analytics")}
+        >
           <span className="nav-icon">◉</span>
           Analytics
         </button>
 
-        <button className="nav-item">
+        <button
+          className={`nav-item ${currentPage === "settings" ? "active" : ""}`}
+          onClick={() => onNavigate("settings")}
+        >
           <span className="nav-icon">⚙</span>
           Settings
         </button>

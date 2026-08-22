@@ -4,6 +4,19 @@
 
 BEGIN;
 
+CREATE TABLE IF NOT EXISTS public.lender_settings (
+    id TEXT PRIMARY KEY,
+    review_threshold INTEGER NOT NULL DEFAULT 650 CHECK (review_threshold BETWEEN 300 AND 900),
+    auto_refresh_minutes INTEGER NOT NULL DEFAULT 15 CHECK (auto_refresh_minutes BETWEEN 1 AND 120),
+    email_notifications BOOLEAN NOT NULL DEFAULT TRUE,
+    weekly_report BOOLEAN NOT NULL DEFAULT TRUE,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+INSERT INTO public.lender_settings (id)
+VALUES ('default')
+ON CONFLICT (id) DO NOTHING;
+
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 -- =========================================================
