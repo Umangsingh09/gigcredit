@@ -414,29 +414,56 @@ class HomeDashboardScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 20),
                       SizedBox(
-                        height: 180,
+                        height: 190,
                         child: LineChart(
                           LineChartData(
                             gridData: const FlGridData(show: false),
                             titlesData: FlTitlesData(
-                              leftTitles: const FlTitlesData().leftTitles,
-                              rightTitles: const FlTitlesData().rightTitles,
-                              topTitles: const FlTitlesData().topTitles,
+                              leftTitles: const AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
+                              rightTitles: const AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
+                              topTitles: const AxisTitles(
+                                sideTitles: SideTitles(showTitles: false),
+                              ),
                               bottomTitles: AxisTitles(
                                 sideTitles: SideTitles(
                                   showTitles: true,
+                                  reservedSize: 32,
+                                  interval: 1,
                                   getTitlesWidget: (val, meta) {
+                                    String labelText;
                                     switch (val.toInt()) {
                                       case 0:
-                                        return const Text('Nov', style: TextStyle(color: AppTheme.textSecondary, fontSize: 10));
+                                        labelText = 'Nov\n₹21.0k';
+                                        break;
                                       case 1:
-                                        return const Text('Dec', style: TextStyle(color: AppTheme.textSecondary, fontSize: 10));
+                                        labelText = 'Dec\n₹24.5k';
+                                        break;
                                       case 2:
-                                        return const Text('Jan', style: TextStyle(color: AppTheme.textSecondary, fontSize: 10));
+                                        labelText = 'Jan\n₹28.0k';
+                                        break;
                                       case 3:
-                                        return const Text('Feb', style: TextStyle(color: AppTheme.textSecondary, fontSize: 10));
+                                        labelText = 'Feb\n₹30.9k';
+                                        break;
+                                      default:
+                                        return const SizedBox.shrink();
                                     }
-                                    return const Text('');
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 6.0),
+                                      child: Text(
+                                        labelText,
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          color: AppTheme.textSecondary,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold,
+                                          height: 1.2,
+                                        ),
+                                      ),
+                                    );
                                   },
                                 ),
                               ),
@@ -468,68 +495,7 @@ class HomeDashboardScreen extends StatelessWidget {
                   ),
                 ),
               ),
-
-              const SizedBox(height: 24),
-
-              // Connected Platforms List Preview
-              const Text(
-                'Linked Gig Platforms',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
-              ),
-              const SizedBox(height: 12),
-              ...profile.platforms.map((platform) => Container(
-                    margin: const EdgeInsets.only(bottom: 10),
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: AppTheme.cardBgDark,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppTheme.borderDark),
-                    ),
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                          backgroundColor: AppTheme.secondaryAccent,
-                          child: Icon(
-                            platform.isConnected ? Icons.check_circle : Icons.add_link,
-                            color: platform.isConnected ? AppTheme.primaryAccent : AppTheme.textSecondary,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                platform.name,
-                                style: const TextStyle(fontWeight: FontWeight.bold, color: AppTheme.textPrimary),
-                              ),
-                              Text(
-                                platform.workType,
-                                style: const TextStyle(fontSize: 11, color: AppTheme.textSecondary),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              platform.isConnected ? currencyFormatter.format(platform.monthlyEarnings) : 'Not Linked',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: platform.isConnected ? AppTheme.primaryAccent : AppTheme.textSecondary,
-                              ),
-                            ),
-                            if (platform.isConnected)
-                              Text(
-                                '${platform.rating} ★',
-                                style: const TextStyle(fontSize: 11, color: Color(0xFFFFB800)),
-                              ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  )),
+              const SizedBox(height: 16),
             ],
           ),
         ),
