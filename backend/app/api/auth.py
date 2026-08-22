@@ -1,7 +1,6 @@
-import uuid
 from fastapi import APIRouter, HTTPException
 
-from backend.app.schemas.auth import LoginRequest, RegisterRequest, GoogleAuthRequest
+from backend.app.schemas.auth import LoginRequest, RegisterRequest
 from backend.app.core.supabase import supabase
 
 local_users = {}
@@ -10,40 +9,6 @@ router = APIRouter(
 	prefix="/auth",
 	tags=["Authentication"]
 )
-
-
-@router.post("/google")
-def google_auth(data: GoogleAuthRequest):
-	"""
-	Backend Authentication endpoint for Google OAuth Sign-In.
-	Authenticates user via Supabase OAuth or local engine fallback.
-	"""
-	user_id = str(uuid.uuid4())
-	access_token = f"gc_google_token_{uuid.uuid4().hex[:12]}"
-
-	if supabase:
-		try:
-			response = supabase.auth.admin.create_user({
-				"email": data.email,
-				"email_confirm": True,
-				"user_metadata": {"full_name": data.name, "avatar_url": data.photo_url}
-			})
-			if hasattr(response, "user") and response.user:
-				user_id = str(response.user.id)
-		except Exception:
-			pass
-
-	full_name = data.name or data.email.split("@")[0].capitalize()
-	local_users[data.email] = {"password": "", "full_name": full_name}
-
-	return {
-		"message": "Google Authentication Successful",
-		"user_id": user_id,
-		"email": data.email,
-		"name": full_name,
-		"access_token": access_token,
-		"provider": "google",
-	}
 
 
 @router.post("/register")
