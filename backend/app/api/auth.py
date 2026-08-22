@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 
+from backend.app.core.config import ENVIRONMENT
 from backend.app.schemas.auth import LoginRequest, RegisterRequest
 from backend.app.core.supabase import supabase
 
@@ -10,10 +11,29 @@ router = APIRouter(
 	tags=["Authentication"]
 )
 
+_DEVELOPMENT_ENVIRONMENT = "development"
+
+
+def _require_local_auth_allowed() -> None:
+	"""Raise unless the in-memory local auth fallback may be used.
+
+	This fallback is a development-only convenience for running the API
+	without a Supabase project configured (see local_users below). It
+	must never activate just because Supabase happens to be unavailable
+	-- ENVIRONMENT must also be explicitly "development" (defaults to
+	"production" -- backend/app/core/config.py). This mirrors the same
+	two-condition gate backend/app/api/deps.py applies to token
+	verification, so a misconfigured production deployment fails closed
+	on registration/login too, not just on already-issued tokens.
+	"""
+	if ENVIRONMENT != _DEVELOPMENT_ENVIRONMENT:
+		raise HTTPException(status_code=503, detail="Authentication service unavailable")
+
 
 @router.post("/register")
 def register(data: RegisterRequest):
 	if supabase is None:
+		_require_local_auth_allowed()
 		if data.email in local_users:
 			raise HTTPException(status_code=400, detail="An account with this email already exists")
 		local_users[data.email] = {"password": data.password, "full_name": data.full_name}
@@ -52,6 +72,7 @@ def register(data: RegisterRequest):
 @router.post("/login")
 def login(data: LoginRequest):
 	if supabase is None:
+		_require_local_auth_allowed()
 		user = local_users.get(data.email)
 		if not user or user["password"] != data.password:
 			raise HTTPException(status_code=401, detail="Invalid email or password")
