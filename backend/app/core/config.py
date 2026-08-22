@@ -9,3 +9,5 @@ load_dotenv(ENV_FILE)
 
 SUPABASE_URL = os.getenv("SUPABASE_URL", "")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY", "")
+
+SUPABASE_ENABLED = bool(SUPABASE_URL and SUPABASE_KEY)

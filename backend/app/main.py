@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from backend.app.api.auth import router as auth_router
 from backend.app.api.credit import router as credit_router
+from backend.app.api.management import router as management_router
 from backend.app.api.worker import router as worker_router
 
 app = FastAPI(
@@ -11,7 +12,7 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# Enable CORS for Flutter Web / Android / Desktop clients
+# Enable CORS for the lender dashboard (Vite dev server) and Flutter Web / Android / Desktop clients
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -30,5 +31,6 @@ def health_check():
 
 
 app.include_router(auth_router)
+app.include_router(management_router)
 app.include_router(credit_router)
 app.include_router(worker_router)

@@ -1,7 +1,7 @@
 import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 
-function Layout({ children, currentPage, onNavigate }) {
+function Layout({ children, currentPage, onNavigate, onLogout, profile }) {
   return (
     <div className="app-layout">
       <Sidebar
@@ -10,7 +10,7 @@ function Layout({ children, currentPage, onNavigate }) {
       />
 
       <div className="main-area">
-        <Topbar currentPage={currentPage} />
+        <Topbar currentPage={currentPage} onLogout={onLogout} profile={profile} />
 
         <main className="page-content">
           {children}
